@@ -1,5 +1,5 @@
-# **Mapa de Acessibilidade Urbana(Ainda estamos pensando em um nome melhor)**
-## *Algumas coisas ainda não estão certas, mas esta sendo atualizado continualmente, segue com oque sera planejado,*
+# **Mapa de Acessibilidade Urbana(Ainda estamos pensando em um nome especial ao projeto)**
+## *Algumas coisas ainda não estão certas, mas esta sendo atualizado continualmente, segue com oque sera planejado.*
 
  A plataforma permitirá que os usuários marquem no mapa, locais acessíveis e 
 pontos de atenção. Serão incluídas rampas, calçadas adequadas, caminhos com faixas de 
