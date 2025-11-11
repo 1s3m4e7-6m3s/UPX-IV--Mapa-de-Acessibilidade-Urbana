@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nomeUsuarioElement.textContent = primeiroNome + '!'; 
         }
     } else {
-        alert('Por favor, faça login para acessar o mapa.');
-        window.location.href = 'index.html';
-        return; 
+        console.log('Usuário visitante — acesso somente leitura.'); 
     }
     
     // Mapa e pesquisa de endereço
@@ -78,6 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     if (window.myMap) {
+
+        const userDataJson = sessionStorage.getItem('usuarioLogado');
+        const usuarioLogado = !!userDataJson; // true ou false
+
+        if (!usuarioLogado) {
+            console.log("Modo visitante — apenas visualização.");
+            return; // impede de adicionar novos marcadores
+        }
 
         map.on('click', () => {
             menuContexto.classList.add('popup-escondido');
