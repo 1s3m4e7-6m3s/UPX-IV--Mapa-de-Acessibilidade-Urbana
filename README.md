@@ -30,7 +30,6 @@ Tecnologias encontradas no repositório (ajuste se necessário):
 2. Navegar e dar zoom
 3. Clicar nos marcadores
 4. Visualizar informações
-5. Filtrar, caso implementado
 
 ---
 
