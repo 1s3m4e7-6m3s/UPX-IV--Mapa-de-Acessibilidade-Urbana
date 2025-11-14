@@ -1,6 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
+const sql = require('mssql');
+const {getConnection} = require('./database');
 
 
 const app = express();
@@ -15,62 +17,80 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-app.use(express.static('public'));
+app.use(express.static('../Front end_web'));
 
-const users = []; //Banco de dados "falso"/temporário (ele é apagado assim que o servidor é reiniciado)
+// Cadrasto de Usuarios.
 
 app.post('/cadastro', async (req, res) => {
     try {
     const { nome, email, senha } = req.body;
 
-    const userExists = users.find(user => user.email === email);
-    if (userExists) {
-        return res.status(400).send('Este e-mail já está cadastrado.');
+    if (!nome || !eamil || !senha) {
+        return res.status(400).send('Preencha todos os campos!');
     }
 
-    const hashedPassword = await bcrypt.hash(senha, 10);
+    const pool = await getConnection();
 
-    const newUser = { id: users.length + 1, username: nome, email, password: hashedPassword };
-    users.push(newUser);
+    const buscaEmail = await getConnection()
+        .input("email", sql.varChar, email)
+        .query("Select * FROM Usuario Where email = @email");
 
-    console.log('Novo usuário cadastrado: ', newUser);
-    console.log('Total de usuários: ', users);
-
-    res.status(201).json({message: 'Usuário cadastrado com sucesso!'});
+    if (buscaEmail.recordset.lenght > 0) {
+        return res.status(400).send("Este e-mail já esta cadrastado");
     }
+
+    const senhaCript = await bcrypt.hash(senha, 10);
+
+    await pool.request()
+        .input("nome", sql.VarChar, nome)
+        .input("email", sql.VarChar, email)
+        .input("senha", sql.Varchar, senhaCript)
+        .query(`INSERT INTO Usuario (nome, email, senha)VALUES (@nome, @email, @senha)`);
+    
+    res.status(201).json({ message: "Cadrastro realizado com sucesso!" });
+    } 
     catch (error){
-        console.error(error);
-        res.status(500).json('Erro no servidor.');
+        console.error("Error no cadastro:", error);
+        res.status(500).send('Erro no servidor.');
     }
 });
+
+//Login dos Usuarios.
 
 app.post('/login', async (req, res) => {
     try {
         const { email, senha } = req.body;
 
-        const user = users.find(user => user.email === email);
+        const pool = await getConnection();
+        
+        const buscaUser = await pool.request()
+            .input("email", sql.Varchar, email)
+            .query("SELECT * FROM Usuario WHERE email = @email");
 
-        if (!user || !(await bcrypt.compare(senha, user.password))) {
-            return res.status(401).json({ message: 'E-mail ou senha inválidos.' });
+        if (buscaUser.recordset.lenght === 0) {
+            return res.status(401).json({ message: 'Usuario não encontrado.' });
         }
 
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        };
+        const usuario = buscaUser.recordset[0];
 
-        console.log('Usuário logado:', req.session.user);
+        const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
-        res.status(200).json({ message: 'Login bem-sucedido!', user: req.session.user });
+        if(!senhaValida) {
+            return res.status(401).json({ message: "Senha incorreta."})
+        }
+
+        req.status(200).json ({
+            message: "login bem-sucedido!",
+            user: req.session.user
+        });
 
     } catch (error) {
-        console.error(error);
+        console.error("Erro no login:", error);
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
+//Server
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-    console.log('Seu site está sendo servido da pasta "public"');
 });
