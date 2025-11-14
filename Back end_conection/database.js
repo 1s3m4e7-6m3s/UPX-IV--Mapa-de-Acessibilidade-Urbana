@@ -2,7 +2,7 @@ const sql = require('mssql');
 
 //Configuração para Windowns Authentication
 const config = {
-    sever: "DESKTIO-B4JK7O0\\SQLEXPRESS",
+    sever: "DESKTOP-B4JK7O0\\SQLEXPRESS",
     database: "Acessmap_DB",
     options: {
         encrypt: false,
