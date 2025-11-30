@@ -2,6 +2,8 @@ const sql = require('mssql');
 
 //Configuração para Windowns Authentication
 const config = {
+    user: "NodeUser",
+    password: "12345",
     server: "DESKTOP-B4JK7O0\\SQLEXPRESS",
     database: "Acessmap_DB",
     options: {
@@ -9,14 +11,6 @@ const config = {
         trustServerCertificate: true,
         enableArithAbort: true
     },
-    authentication: {
-        type: "ntlm",
-        options: {
-            domain: "",
-            userName: "",
-            password: ""
-        }
-    }
 };
 
 async function getConnection() {
