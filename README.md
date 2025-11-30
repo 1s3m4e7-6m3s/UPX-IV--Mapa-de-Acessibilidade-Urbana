@@ -42,3 +42,33 @@ Sugestões de aprimoramento para evolução do projeto:
 * Adicionar modo claro/escuro.
 * Gerar relatórios automáticos sobre a acessibilidade da região.
 * Criar app mobile (Inicialmente a Plataforma foi criada como uma plataforma web devido a matéria de Programação Web que tivemos esse semestre).
+
+
+# 🗺️ Projeto Mapa — Como Executar
+
+## ✅ Pré-requisitos
+- 📦 Git instalado  
+- 🧠 Node.js instalado  
+
+---
+
+## ▶️ Rodando o projeto
+
+1. 📥 Clone o repositório:
+   ```bash
+   git clone <URL-DO-SEU-REPO>
+   cd <NOME-DA-PASTA>
+
+## 📚 Instale as dependências:
+
+1. npm install
+
+## 🚀Inicie o servidor:
+
+2. node server.js
+
+## 🌍 Abra no navegador:
+
+3. Copiar código
+
+4. http://localhost:3000
